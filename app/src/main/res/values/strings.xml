@@ -30,5 +30,6 @@
     <string name="item_appointnment_date">Cita par el dia %1$s</string>
     <string name="item_appointnment_time">A las %1$s</string>
     <string name="label_my_appointments">Mis Citas</string>
+    <string name="press_back_again">Presione una vez mas para salir</string>
 
 </resources>
