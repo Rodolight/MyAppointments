@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import com.rdpsoftware.myappointments.databinding.ActivityCreateAppointmentBinding
 import java.util.*
@@ -25,9 +26,13 @@ class CreateAppointmentActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.btnNext.setOnClickListener{
-            binding.cardView.visibility = View.GONE
-            binding.cardView2.visibility = View.VISIBLE
+        binding.btnNext.setOnClickListener {
+            if (binding.etDescription.text.toString().length < 3) {
+                binding.etDescription.error = getString(R.string.validate_create_appointment_description)
+            } else {
+                binding.cvStep1.visibility = View.GONE
+                binding.cvStep2.visibility = View.VISIBLE
+            }
         }
 
         binding.btConfirm.setOnClickListener{
@@ -105,6 +110,23 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
     private fun Int.twoDigits() = if(this>9) this.toString() else "0$this"
 
-
-
+    override fun onBackPressed() {
+        if (binding.cvStep2.visibility == View.VISIBLE) {
+            binding.cvStep2.visibility = View.GONE
+            binding.cvStep1.visibility = View.VISIBLE
+        } else {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle(getString(R.string.dialog_create_appointment_exit_title))
+                    .setMessage(getString(R.string.dialog_create_appointment_exit_message))
+                    .setPositiveButton(getString(R.string.dialog_create_appointment_exit_positive_btn)) { _, _ ->
+                        finish()
+                    }
+                    .setNegativeButton(getString(R.string.dialog_create_appointment_exit_negative_btn)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .setCancelable(false)
+            val dialog = builder.create()
+            dialog.show()
+        }
+    }
 }
