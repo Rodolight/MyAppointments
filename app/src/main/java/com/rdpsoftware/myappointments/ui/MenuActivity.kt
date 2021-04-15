@@ -1,8 +1,9 @@
-package com.rdpsoftware.myappointments
+package com.rdpsoftware.myappointments.ui
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.rdpsoftware.myappointments.PreferenceHelper
 import com.rdpsoftware.myappointments.PreferenceHelper.set
 import com.rdpsoftware.myappointments.databinding.ActivityMenuBinding
 

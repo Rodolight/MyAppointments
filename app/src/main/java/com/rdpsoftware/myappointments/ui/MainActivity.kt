@@ -1,12 +1,14 @@
- package com.rdpsoftware.myappointments
+ package com.rdpsoftware.myappointments.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
+import com.rdpsoftware.myappointments.PreferenceHelper
 import com.rdpsoftware.myappointments.databinding.ActivityMainBinding
 import com.rdpsoftware.myappointments.PreferenceHelper.get
 import com.rdpsoftware.myappointments.PreferenceHelper.set
+import com.rdpsoftware.myappointments.R
 
  class MainActivity : AppCompatActivity() {
      private lateinit var binding: ActivityMainBinding

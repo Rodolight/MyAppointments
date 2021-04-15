@@ -1,4 +1,4 @@
-package com.rdpsoftware.myappointments
+package com.rdpsoftware.myappointments.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

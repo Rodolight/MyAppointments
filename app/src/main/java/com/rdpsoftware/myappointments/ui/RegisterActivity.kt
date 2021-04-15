@@ -1,4 +1,4 @@
-package com.rdpsoftware.myappointments
+package com.rdpsoftware.myappointments.ui
 
 import android.content.Intent
 import android.os.Bundle
