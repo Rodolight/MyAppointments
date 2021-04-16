@@ -4,12 +4,11 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.RadioButton
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.rdpsoftware.myappointments.Models.Doctor
 import com.rdpsoftware.myappointments.Models.Specialty
 import com.rdpsoftware.myappointments.R
 import com.rdpsoftware.myappointments.databinding.ActivityCreateAppointmentBinding
@@ -48,7 +47,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
         step3 = binding.includeStepThree
 
         loadSpecialties()
-        loadDoctors()
+        listenSpecialtyChanges()
         showStep2()
         showStep3()
         onClickScheduledDate()
@@ -61,13 +60,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
             override fun onResponse(call: Call<ArrayList<Specialty>>,response: Response<ArrayList<Specialty>> ) {
                if(response.isSuccessful){ //[200...300]
                    val specialties = response.body()
-                   val specialtiesOptions = ArrayList<String>()
-
-                   specialties?.forEach{
-                       specialtiesOptions.add(it.name)
-                   }
-
-                   step1.spinnerSpecialties.adapter = ArrayAdapter<String>(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1,specialtiesOptions)
+                   step1.spinnerSpecialties.adapter = ArrayAdapter(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1, specialties!!.toMutableList())
                }
             }
 
@@ -77,14 +70,53 @@ class CreateAppointmentActivity : AppCompatActivity() {
             }
 
         })
-
-//        val specialtiesOptions = arrayOf("Specialty A","Specialty B","Specialty C")
-//        binding.includeStepOne.spinnerSpecialties.adapter = ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,specialtiesOptions)
     }
 
-    private fun loadDoctors(){
-        val doctorsOptions = arrayOf("Doctor A","Doctor B","Doctor C")
-        binding.includeStepTwo.spinnerDoctors.adapter = ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,doctorsOptions)
+    private fun listenSpecialtyChanges(){
+            step1.spinnerSpecialties.onItemSelectedListener = object : AdapterView.OnItemClickListener,
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                adapter: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+               val specialty = adapter?.getItemAtPosition(position) as Specialty
+                loadDoctors(specialty.id)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onItemClick(
+                adapter: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                TODO("Not yet implemented")
+            }
+
+        }
+    }
+
+    private fun loadDoctors(specialtyId: Int){
+       val call = apiService.getDoctors(specialtyId)
+       call.enqueue(object : Callback<ArrayList<Doctor>> {
+           override fun onResponse(call: Call<ArrayList<Doctor>>, response: Response<ArrayList<Doctor>>) {
+               if(response.isSuccessful){ //[200...300]
+                   val doctors = response.body()
+                   step2.spinnerDoctors.adapter = ArrayAdapter(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1, doctors!!.toMutableList())
+               }
+           }
+
+           override fun onFailure(call: Call<ArrayList<Doctor>>, t: Throwable) {
+               Toast.makeText(this@CreateAppointmentActivity,getString(R.string.error_loading_doctors), Toast.LENGTH_SHORT).show()
+               finish()
+           }
+
+       })
     }
 
     private fun showStep2(){
@@ -131,7 +163,8 @@ class CreateAppointmentActivity : AppCompatActivity() {
             val dayOfWeek = selectedCalendar.get(Calendar.DAY_OF_MONTH)
             val listener = DatePickerDialog.OnDateSetListener { _, y, m, d ->
                 selectedCalendar.set(y,m,d)
-                binding.includeStepTwo.etScheduledDate.setText("$y-${(m+1).twoDigits()}-${d.twoDigits()}")
+            val selectedDate = "$y-${(m+1).twoDigits()}-${d.twoDigits()}"
+                binding.includeStepTwo.etScheduledDate.setText(selectedDate)
                 displayRadioButton()
                 step2.etScheduledDate.error = null
             }

@@ -40,5 +40,6 @@
     <string name="validate_create_appointment_date">" Es necesario seleccionar una fecha"</string>
     <string name="validate_create_appointment_time">Es necesario selecionar una hora</string>
     <string name="error_loading_specialties">Ocurrió un problema al cargar las especialidades</string>
+    <string name="error_loading_doctors">Ocurrio un problema cargando los médicos</string>
 
 </resources>

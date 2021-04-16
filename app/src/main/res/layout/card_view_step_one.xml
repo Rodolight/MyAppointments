@@ -8,6 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardCornerRadius="8dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,13 +23,14 @@
             android:layout_marginTop="12dp"
             android:hint="@string/promptDescription"
             android:autofillHints=""
+            android:textSize="15sp"
             android:inputType="text"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="@string/label_specialty"
-            android:textSize="18sp"/>
+            android:text="@string/label_specialty" />
 
         <Spinner
             android:id="@+id/spinnerSpecialties"
@@ -39,8 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/label_appointment_type"
-            android:textSize="18sp"/>
+            android:text="@string/label_appointment_type"/>
 
         <RadioGroup
             android:id="@+id/radioGroupType"
@@ -75,4 +76,5 @@
             android:text="@string/btn_next" />
 
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

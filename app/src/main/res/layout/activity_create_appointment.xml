@@ -14,12 +14,11 @@
     tools:context=".ui.CreateAppointmentActivity">
 
 
-
      <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-         android:layout_marginBottom="60dp"
+         android:layout_marginBottom="20dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:text="@string/label_create_appointment" />
 
