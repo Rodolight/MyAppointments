@@ -3,12 +3,15 @@ package com.rdpsoftware.myappointments.ui
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.rdpsoftware.myappointments.Models.Doctor
+import com.rdpsoftware.myappointments.Models.Schedule
 import com.rdpsoftware.myappointments.Models.Specialty
 import com.rdpsoftware.myappointments.R
 import com.rdpsoftware.myappointments.databinding.ActivityCreateAppointmentBinding
@@ -48,6 +51,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
         loadSpecialties()
         listenSpecialtyChanges()
+        listenDoctorAndDateChanges()
         showStep2()
         showStep3()
         onClickScheduledDate()
@@ -119,6 +123,80 @@ class CreateAppointmentActivity : AppCompatActivity() {
        })
     }
 
+    private fun listenDoctorAndDateChanges() {
+        step2.spinnerDoctors.onItemSelectedListener = object : AdapterView.OnItemClickListener,
+                AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val doctor = adapter?.getItemAtPosition(position) as Doctor
+                loadHours(doctor.id, step2.etScheduledDate.text.toString())
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                TODO("Not yet implemented")
+            }
+
+        }
+
+        // scheduled date
+        step2.etScheduledDate.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+               val doctor = step2.spinnerDoctors.selectedItem as Doctor
+                loadHours(doctor.id, step2.etScheduledDate.text.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
+
+
+    }
+
+    private fun loadHours(doctorId: Int, date: String){
+        if(date.isEmpty()) return
+
+        val call = apiService.getHours(doctorId, date)
+        call.enqueue(object: Callback<Schedule>{
+            override fun onResponse(call: Call<Schedule>, response: Response<Schedule>) {
+               if(response.isSuccessful){
+                   val schedule = response.body()
+                   val hours = ArrayList<String>()
+                   val hoursPM = ArrayList<String>()
+
+                   step2.tvSelectDoctorAndDate.visibility = View.GONE
+
+                  schedule?.let {
+
+                        it.morning.forEach{ interval ->
+                            hours.add(interval.start)
+                        }
+                        it.afternoon.forEach{pmInterval ->
+                            hoursPM.add(pmInterval.start)
+                        }
+                    }
+                   displayIntervalsRadios(hours, hoursPM )
+
+               }
+            }
+
+            override fun onFailure(call: Call<Schedule>, t: Throwable) {
+                Toast.makeText(this@CreateAppointmentActivity, getString(R.string.error_loading_hours), Toast.LENGTH_SHORT).show()
+            }
+
+        } )
+
+       // Toast.makeText(this@CreateAppointmentActivity, "doctor: $doctorId, date: $date", Toast.LENGTH_SHORT).show()
+    }
+
     private fun showStep2(){
         step1.btnNext.setOnClickListener {
                 if (binding.includeStepOne.etDescription.text.toString().length < 3) {
@@ -165,7 +243,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
                 selectedCalendar.set(y,m,d)
             val selectedDate = "$y-${(m+1).twoDigits()}-${d.twoDigits()}"
                 binding.includeStepTwo.etScheduledDate.setText(selectedDate)
-                displayRadioButton()
+                //displayRadioButton()
                 step2.etScheduledDate.error = null
             }
 
@@ -182,13 +260,18 @@ class CreateAppointmentActivity : AppCompatActivity() {
         }
     }
 
-    private fun displayRadioButton() {
+    private fun displayIntervalsRadios(hours: ArrayList<String>, hoursPM: ArrayList<String>) {
         binding.includeStepTwo.rgLeft.removeAllViews()
         binding.includeStepTwo.rgRight.removeAllViews()
         selectedTimeRadioButton = null
 
-        val hours = arrayOf("8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM")
-        val hoursPM = arrayOf("3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM")
+        if(hours.isEmpty() && hoursPM.isEmpty()){
+            step2.tvNotAvailableHours.visibility = View.VISIBLE
+            step2.svHours.visibility = View.GONE
+            return
+        }
+        step2.tvNotAvailableHours.visibility = View.GONE
+        step2.svHours.visibility = View.VISIBLE
 
         hours.forEach {
                 val radioButton = RadioButton(this)

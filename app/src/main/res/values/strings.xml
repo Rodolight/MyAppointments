@@ -41,5 +41,8 @@
     <string name="validate_create_appointment_time">Es necesario selecionar una hora</string>
     <string name="error_loading_specialties">Ocurrió un problema al cargar las especialidades</string>
     <string name="error_loading_doctors">Ocurrio un problema cargando los médicos</string>
+    <string name="error_loading_hours">No se ha podido cargar las horas</string>
+    <string name="label_select_doctor_and_date">Selecciona un médico y una fecha para ver sus horas disponibles.</string>
+    <string name="label_not_available_hours">No se encontraron horas disponibles para el médico en la fecha seleccionada.</string>
 
 </resources>

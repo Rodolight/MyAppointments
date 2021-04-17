@@ -44,10 +44,28 @@
                 android:layout_marginTop="12dp"
                 android:text="@string/label_hours"
                 android:gravity="center" />
+            <TextView
+                android:id="@+id/tvSelectDoctorAndDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/label_select_doctor_and_date"
+                android:textColor="@color/teal_200"/>
+
+            <TextView
+                android:id="@+id/tvNotAvailableHours"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:visibility="gone"
+                android:text="@string/label_not_available_hours"
+                android:textColor="@color/black"/>
 
             <androidx.core.widget.NestedScrollView
+                android:id="@+id/svHours"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 android:layout_weight="1">
                 <LinearLayout
                     android:layout_width="match_parent"
