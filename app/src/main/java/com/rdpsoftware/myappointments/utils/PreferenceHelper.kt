@@ -1,4 +1,4 @@
-package com.rdpsoftware.myappointments
+package com.rdpsoftware.myappointments.utils
 
 import android.content.Context
 import android.content.SharedPreferences

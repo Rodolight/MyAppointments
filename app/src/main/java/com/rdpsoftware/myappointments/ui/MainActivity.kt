@@ -1,21 +1,30 @@
  package com.rdpsoftware.myappointments.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.rdpsoftware.myappointments.PreferenceHelper
-import com.rdpsoftware.myappointments.databinding.ActivityMainBinding
-import com.rdpsoftware.myappointments.PreferenceHelper.get
-import com.rdpsoftware.myappointments.PreferenceHelper.set
 import com.rdpsoftware.myappointments.R
+import com.rdpsoftware.myappointments.databinding.ActivityMainBinding
+import com.rdpsoftware.myappointments.io.ApiService
+import com.rdpsoftware.myappointments.io.response.LoginResponse
+import com.rdpsoftware.myappointments.utils.PreferenceHelper
+import com.rdpsoftware.myappointments.utils.PreferenceHelper.get
+import com.rdpsoftware.myappointments.utils.PreferenceHelper.set
+import com.rdpsoftware.myappointments.utils.toast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
- class MainActivity : AppCompatActivity() {
+ class MainActivity : AppCompatActivity()  {
      private lateinit var binding: ActivityMainBinding
      private val snackBar by lazy {
          Snackbar.make(binding.mainLayout, R.string.press_back_again, Snackbar.LENGTH_LONG)
      }
 
+     private val apiService: ApiService by lazy{
+         ApiService.create()
+     }
          override fun onCreate(savedInstanceState: Bundle?) {
              super.onCreate(savedInstanceState)
              binding = ActivityMainBinding.inflate(this.layoutInflater)
@@ -26,13 +35,12 @@ import com.rdpsoftware.myappointments.R
 //         val session = preferences.getBoolean("session", false)
              val preferences = PreferenceHelper.defaultPrefs(this)
 
-             if(preferences["session", false])
+             if(preferences["jwt", ""].contains("."))
                  goToMenuActivity()
 
              binding.btnLogin.setOnClickListener(){
                  // validates
-                 createSessionPreferences()
-                 goToMenuActivity()
+                 performLogin()
              }
 
              binding.tvGoToRegister.setOnClickListener(){
@@ -42,14 +50,48 @@ import com.rdpsoftware.myappointments.R
              }
          }
 
-         private fun createSessionPreferences(){
-//         val preferences = getSharedPreferences("general", MODE_PRIVATE)
-//         val editor = preferences.edit()
-//         editor.putBoolean("session", true)
-//         editor.apply()
+         private fun performLogin(){
+             val email = binding.etEmail.text.toString()
+             val password = binding.etPassword.text.toString()
+
+             if(email.trim().isEmpty() || password.trim().isEmpty()){
+               toast(getString(R.string.error_empty_credentials))
+                 return
+             }
+
+            val call = apiService.postLogin(email, password )
+            call.enqueue(object: Callback<LoginResponse>{
+                override fun onResponse( call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                    if(response.isSuccessful){
+                        val loginResponse = response.body()
+                            if (loginResponse == null) {
+                                toast(getString(R.string.error_login_response))
+                                return
+                            }
+                        if(loginResponse.success){
+                            createSessionPreferences(loginResponse.jwt)
+                            toast(getString(R.string.welcome_name,loginResponse.user.name))
+                            goToMenuActivity()
+                        }else{
+                            toast(getString(R.string.error_invalid_credentials))
+                        }
+                    }else{
+                        toast(getString(R.string.error_login_response))
+                    }
+                }
+
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                  toast(t.localizedMessage)
+                }
+
+            })
+        }
+
+         private fun createSessionPreferences(jwt : String){
              val preferences = PreferenceHelper.defaultPrefs(this)
-             preferences["session"] = true
+             preferences["jwt"] = jwt
          }
+
          private fun goToMenuActivity(){
              val intent = Intent(this, MenuActivity::class.java)
              startActivity(intent)
