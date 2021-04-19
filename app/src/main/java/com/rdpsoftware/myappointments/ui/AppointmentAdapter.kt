@@ -9,18 +9,18 @@ import com.rdpsoftware.myappointments.Models.Appointment
 import com.rdpsoftware.myappointments.R
 
 
-class AppointmentAdapter(private val appointments:ArrayList<Appointment>)
-         : RecyclerView.Adapter<AppointmentAdapter.ViewHolder>() {
+class AppointmentAdapter : RecyclerView.Adapter<AppointmentAdapter.ViewHolder>() {
+    var appointments = ArrayList<Appointment>()
 
     class ViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView){
        fun bind(appointment:Appointment) = with(itemView){
                findViewById<TextView>(R.id.tvAppointment).text =
                         context.getString(R.string.item_appointnment_id,appointment.id)
-               findViewById<TextView>(R.id.tvDoctor).text = appointment.doctorName
+               findViewById<TextView>(R.id.tvDoctor).text = appointment.doctor.name
                findViewById<TextView>(R.id.tvScheduledDate).text =
                         context.getString(R.string.item_appointnment_date,appointment.scheduledDate)
                findViewById<TextView>(R.id.tvScheduledTime).text =
-                        context.getString(R.string.item_appointnment_time,appointment.ScheduledTime)
+                        context.getString(R.string.item_appointnment_time,appointment.scheduleTime)
             }
        }
 

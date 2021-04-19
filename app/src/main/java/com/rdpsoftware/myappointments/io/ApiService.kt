@@ -1,5 +1,6 @@
 package com.rdpsoftware.myappointments.io
 
+import com.rdpsoftware.myappointments.Models.Appointment
 import com.rdpsoftware.myappointments.Models.Doctor
 import com.rdpsoftware.myappointments.Models.Schedule
 import com.rdpsoftware.myappointments.Models.Specialty
@@ -28,6 +29,9 @@ interface ApiService {
 
     @POST("logout")
     abstract fun postLogout(@Header("Authorization") authHeader: String):Call<Void>
+
+    @POST("appointments")
+    abstract fun getAppointments(@Header("Authorization") authHeader: String):Call<ArrayList<Appointment>>
 
     companion object Factory{
         private const val BASE_URL = "http://104.236.89.149/api/"
