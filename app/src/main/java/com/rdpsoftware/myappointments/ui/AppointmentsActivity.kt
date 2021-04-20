@@ -42,11 +42,12 @@ class AppointmentsActivity : AppCompatActivity() {
     private fun loadAppointments(){
         val jwt = preferences["jwt", ""]
        val call = apiService.getAppointments("Bearer $jwt")
-       call.enqueue(object: Callback<ArrayList<Appointment>> {
+       call.enqueue(object:Callback<ArrayList<Appointment>> {
            override fun onResponse(call: Call<ArrayList<Appointment>>, response: Response<ArrayList<Appointment>>) {
              if ( response.isSuccessful){
                  response.body()?.let {
                      appointmentAdapter.appointments = it
+                     appointmentAdapter.notifyDataSetChanged()
                  }
              }
            }
@@ -56,8 +57,6 @@ class AppointmentsActivity : AppCompatActivity() {
            }
 
        }) ;
-
-        val appointments = ArrayList<Appointment>()
 
 
     }

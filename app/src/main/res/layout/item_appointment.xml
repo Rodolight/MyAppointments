@@ -48,7 +48,69 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             tools:text="A las 9:30 AM"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvStatus"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                tools:text="Atendida"/>
+            <ImageButton
+                android:id="@+id/ibExpand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:contentDescription="@string/promptDescription"
+                android:background="@color/purple_500"
+                android:src="@drawable/ic_arrow_down_24"/>
 
+        </FrameLayout>
+        <LinearLayout
+            android:id="@+id/llExpandable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvSpecialty"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                tools:text="Pediatria"/>
+
+            <TextView
+                android:id="@+id/tvTypeAppointment"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                tools:text="Consulta"/>
+
+            <TextView
+                android:id="@+id/tvAppointmentDate"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                tools:text="Esta cita se registró el dia 2021-04-19 21:38:00 con la siguiente descripción:"/>
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                tools:text="Descripcion de la cita"/>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

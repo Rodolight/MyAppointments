@@ -30,7 +30,7 @@ interface ApiService {
     @POST("logout")
     abstract fun postLogout(@Header("Authorization") authHeader: String):Call<Void>
 
-    @POST("appointments")
+    @GET("appointments")
     abstract fun getAppointments(@Header("Authorization") authHeader: String):Call<ArrayList<Appointment>>
 
     companion object Factory{

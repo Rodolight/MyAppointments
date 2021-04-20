@@ -48,4 +48,5 @@
     <string name="error_invalid_credentials">Las credenciales son incorrectas</string>
     <string name="error_empty_credentials">Por favor ingrese un correo y una contraseña</string>
     <string name="welcome_name">Bienvenido %1$s</string>
+    <string name="text_appointment_date">Esta cita se registró el dia %1$s con la siguiente descripción:</string>
 </resources>
