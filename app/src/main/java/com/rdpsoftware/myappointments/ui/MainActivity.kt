@@ -2,8 +2,11 @@
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import com.rdpsoftware.myappointments.R
 import com.rdpsoftware.myappointments.databinding.ActivityMainBinding
 import com.rdpsoftware.myappointments.io.ApiService
@@ -30,6 +33,24 @@ import retrofit2.Response
              binding = ActivityMainBinding.inflate(this.layoutInflater)
              val view = binding.root
              setContentView(view)
+
+             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                 if (!task.isSuccessful) {
+                     Log.w("FCMService", "Fetching FCM registration token failed", task.exception)
+                     return@OnCompleteListener
+                 }
+
+                 // Get new FCM registration token
+                 val token = task.result
+
+                 // Log and toast
+                 //val msg = getString(R.string.fcm_message, token)
+                 if (token != null) {
+                     Log.d("FCMService", token)
+                 }
+                // Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+             })
+
              //shared preferences
 //         val preferences = getSharedPreferences("general", MODE_PRIVATE)
 //         val session = preferences.getBoolean("session", false)
@@ -71,7 +92,7 @@ import retrofit2.Response
                         if(loginResponse.success){
                             createSessionPreferences(loginResponse.jwt)
                             toast(getString(R.string.welcome_name,loginResponse.user.name))
-                            goToMenuActivity()
+                            goToMenuActivity(true)
                         }else{
                             toast(getString(R.string.error_invalid_credentials))
                         }
@@ -92,8 +113,11 @@ import retrofit2.Response
              preferences["jwt"] = jwt
          }
 
-         private fun goToMenuActivity(){
-             val intent = Intent(this, MenuActivity::class.java)
+         private fun goToMenuActivity( isUserInput: Boolean = false){
+              val intent = Intent(this, MenuActivity::class.java)
+             if(isUserInput){
+               intent.putExtra("store_token", true)
+             }
              startActivity(intent)
              finish()
          }

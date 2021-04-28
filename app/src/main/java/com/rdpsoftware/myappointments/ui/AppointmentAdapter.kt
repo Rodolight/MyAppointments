@@ -1,5 +1,7 @@
 package com.rdpsoftware.myappointments.ui
 
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,12 +30,13 @@ class AppointmentAdapter : RecyclerView.Adapter<AppointmentAdapter.ViewHolder>()
             findViewById<TextView>(R.id.tvTypeAppointment).text = appointment.type
             val createdAt = appointment.createdAt.substring(0,10)+" "+ appointment.createdAt.substring(11,19)
             findViewById<TextView>(R.id.tvAppointmentDate).text = context.getString(R.string.text_appointment_date, createdAt)
-            findViewById<TextView>(R.id.tvDescription).text
+            findViewById<TextView>(R.id.tvDescription).text = appointment.description
 
            var btnExpand = findViewById<ImageButton>(R.id.ibExpand)
            var llDetail = findViewById<LinearLayout>(R.id.llExpandable)
 
              btnExpand.setOnClickListener{
+                 TransitionManager.beginDelayedTransition(parent as ViewGroup, AutoTransition())
                  if(llDetail.visibility == View.VISIBLE){
                      llDetail.visibility = View.GONE
                      btnExpand.setImageResource(R.drawable.ic_arrow_down_24)

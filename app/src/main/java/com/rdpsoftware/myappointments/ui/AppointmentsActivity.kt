@@ -53,7 +53,7 @@ class AppointmentsActivity : AppCompatActivity() {
            }
 
            override fun onFailure(call: Call<ArrayList<Appointment>>, t: Throwable) {
-              toast(t.localizedMessage)
+              toast(t.message.toString())
            }
 
        }) ;

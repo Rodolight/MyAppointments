@@ -3,6 +3,7 @@ package com.rdpsoftware.myappointments.utils
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.rdpsoftware.myappointments.ui.ProfileActivity
 
 object PreferenceHelper {
 

@@ -19,6 +19,10 @@ import com.rdpsoftware.myappointments.databinding.CardViewStepOneBinding
 import com.rdpsoftware.myappointments.databinding.CardViewStepThreeBinding
 import com.rdpsoftware.myappointments.databinding.CardViewStepTwoBinding
 import com.rdpsoftware.myappointments.io.ApiService
+import com.rdpsoftware.myappointments.io.response.SimpleResponse
+import com.rdpsoftware.myappointments.utils.PreferenceHelper
+import com.rdpsoftware.myappointments.utils.PreferenceHelper.get
+import com.rdpsoftware.myappointments.utils.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +41,9 @@ class CreateAppointmentActivity : AppCompatActivity() {
     private val apiService by lazy {
         ApiService.create()
     }
-
+    private val preferences  by lazy{
+        PreferenceHelper.defaultPrefs(this)
+    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +61,10 @@ class CreateAppointmentActivity : AppCompatActivity() {
         showStep2()
         showStep3()
         onClickScheduledDate()
-        confirmAppointment()
+
+        step3.btnConfirm.setOnClickListener{
+            performStoreAppointment()
+        }
     }
 
     private fun loadSpecialties(){
@@ -226,11 +235,37 @@ class CreateAppointmentActivity : AppCompatActivity() {
         }
     }
 
-    private fun confirmAppointment(){
-        binding.includeStepThree.btnConfirm.setOnClickListener{
-            Toast.makeText(this, "Cita registrada correctamente", Toast.LENGTH_SHORT).show()
-            finish()
-        }
+    private fun performStoreAppointment(){
+
+        step3.btnConfirm.isClickable = false
+
+        val jwt = preferences["jwt", ""]
+        val authHeader = "Bearer $jwt"
+        val description = step3.confirmDescription.text.toString()
+        val specialty = step1.spinnerSpecialties.selectedItem as Specialty
+        val doctor = step2.spinnerDoctors.selectedItem as Doctor
+        val scheduleDate = step3.confirmDate.text.toString()
+        val scheduleTime = step3.confirmHour.text.toString()
+        val type = step3.confirmType.text.toString()
+
+        val call = apiService.storeAppointments(authHeader, description,specialty.id,doctor.id,scheduleDate,scheduleTime,type )
+        call.enqueue(object : Callback<SimpleResponse>{
+            override fun onResponse(call: Call<SimpleResponse>, response: Response<SimpleResponse>) {
+                if(response.isSuccessful){
+                    toast(getString(R.string.create_appointment_success))
+                    finish()
+                }else{
+                    toast(getString(R.string.create_appointment_error))
+                    step3.btnConfirm.isClickable = true
+                }
+            }
+
+            override fun onFailure(call: Call<SimpleResponse>, t: Throwable) {
+                toast(t.localizedMessage)
+                step3.btnConfirm.isClickable = true
+            }
+
+        })
 
     }
 

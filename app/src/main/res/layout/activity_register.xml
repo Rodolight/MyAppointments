@@ -39,22 +39,32 @@
                 android:orientation="vertical">
 
                 <EditText
+                    android:id="@+id/etRegisterName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:hint="@string/promptName"
                     android:inputType="textPersonName" />
                 <EditText
+                    android:id="@+id/etRegisterEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:hint="@string/promptEmail"
                     android:inputType="textEmailAddress" />
                 <EditText
+                    android:id="@+id/etRegisterPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:hint="@string/promptPassword"
+                    android:inputType="textPassword"/>
+                <EditText
+                    android:id="@+id/etRegisterPasswordConfirmation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/promptPasswordConfirmation"
                     android:inputType="textPassword"/>
                 <Button
                     android:id="@+id/btnRegister"

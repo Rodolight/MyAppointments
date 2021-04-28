@@ -1,10 +1,8 @@
 package com.rdpsoftware.myappointments.io
 
-import com.rdpsoftware.myappointments.Models.Appointment
-import com.rdpsoftware.myappointments.Models.Doctor
-import com.rdpsoftware.myappointments.Models.Schedule
-import com.rdpsoftware.myappointments.Models.Specialty
+import com.rdpsoftware.myappointments.Models.*
 import com.rdpsoftware.myappointments.io.response.LoginResponse
+import com.rdpsoftware.myappointments.io.response.SimpleResponse
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,6 +13,17 @@ import retrofit2.http.*
 
 
 interface ApiService {
+    @GET("user")
+    @Headers("Accept:application/json")
+    abstract fun getUser(@Header("Authorization") authHeader: String):Call<User>
+
+    @POST("user")
+    @Headers("Accept:application/json")
+    abstract fun postUser(@Header("Authorization") authHeader: String,
+                          @Query("name") name: String,
+                          @Query("phone") phone: String,
+                          @Query("address") address: String ):Call<Void>
+
     @GET("specialties")
     abstract fun getSpecialties():Call<ArrayList<Specialty>>
 
@@ -32,6 +41,28 @@ interface ApiService {
 
     @GET("appointments")
     abstract fun getAppointments(@Header("Authorization") authHeader: String):Call<ArrayList<Appointment>>
+
+    @POST("appointments")
+    @Headers("Accept:application/json")
+    abstract fun storeAppointments(@Header("Authorization") authHeader: String,
+                                  @Query("description") description: String,
+                                  @Query("specialty_id") specialtyI: Int,
+                                  @Query("doctor_id") doctorId: Int,
+                                  @Query("schedule_date") scheduleDate: String,
+                                  @Query("schedule_time") scheduleTime: String,
+                                  @Query("type") type: String ) : Call<SimpleResponse>
+
+    @POST("register")
+    @Headers("Accept:application/json")
+    abstract fun postRegister(@Query("name") name: String,
+                                   @Query("email") email: String,
+                                   @Query("password") password: String,
+                                   @Query("password_confirmation") password_confirmation:
+                                         String ) : Call<LoginResponse>
+    @POST("fcm/token")
+    @Headers("Accept:application/json")
+    abstract fun postToken(@Header("Authorization") authHeader: String,
+                           @Query("device_token") token: String) : Call<Void>
 
     companion object Factory{
         private const val BASE_URL = "http://104.236.89.149/api/"

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "218297135",
+    "project_id": "my-appointments-dfadc",
+    "storage_bucket": "my-appointments-dfadc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218297135:android:b31349e51d6a36d57aa7da",
+        "android_client_info": {
+          "package_name": "com.rdpsoftware.myappointments"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "218297135-q94th2o0mna6nsu5pa0f80tm0fk2eioq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_JsGnMN_TqpW6cOYxxGkdASoiVTcEM44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "218297135-q94th2o0mna6nsu5pa0f80tm0fk2eioq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,6 +3,7 @@
     <string name="label_login">Inicio de sesión</string>
     <string name="promptEmail">Correo Electrónico</string>
     <string name="promptPassword">Contraseña</string>
+    <string name="promptPasswordConfirmation">Confirmar Contraseña</string>
     <string name="btnLogin">Ingresar</string>
     <string name="label_go_to_register">¿Aún no te has registrado?</string>
     <string name="label_register">Registro</string>
@@ -49,4 +50,19 @@
     <string name="error_empty_credentials">Por favor ingrese un correo y una contraseña</string>
     <string name="welcome_name">Bienvenido %1$s</string>
     <string name="text_appointment_date">Esta cita se registró el dia %1$s con la siguiente descripción:</string>
+    <string name="create_appointment_success">Cita registrada correctamente</string>
+    <string name="create_appointment_error">Ocurrió un error inesperado registrando la cita médica.</string>
+    <string name="error_register_empty_fields">Por favor complete todos los campos</string>
+    <string name="error_register_passwords_do_dot_match">Las contraseñas no son iguales</string>
+    <string name="error_register_validation">Ocurrió un error al hacer el registro</string>
+    <string name="default_notification_channel_id">default_channel</string>
+    <string name="fcm_message">FCM Message</string>
+    <string name="btn_edit_profile">editar perfil</string>
+    <string name="label_edit_profile">Editar Datos Básicos</string>
+    <string name="label_Phone">Número de teléfono</string>
+    <string name="label_address">Dirección</string>
+    <string name="btn_save">guardar cambios</string>
+    <string name="profile_success_message">Los cambios se han guardado correctamente.</string>
+    <string name="error_profile_name">El nombre ingresado es demasiado corto.</string>
+    <string name="you_need_a_phone">Es necesario asociar primero un teléfono a tu cuenta</string>
 </resources>
